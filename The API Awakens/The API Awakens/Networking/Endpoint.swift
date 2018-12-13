@@ -35,17 +35,17 @@ enum StarWarsApi {
 
 extension StarWarsApi: Endpoint {
     var base: String {
-        return "https://swapi.co/api"
+        return "https://swapi.co"
     }
     
     var path: String {
         switch self {
         case .people:
-            return "/people/"
+            return "/api/people/"
         case .starships:
-            return "/starships/"
+            return "/api/starships/"
         case .vehicles:
-            return "/vehicles/"
+            return "/api/vehicles/"
         }
     }
 }

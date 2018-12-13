@@ -14,8 +14,19 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let endPoint = StarWarsApi.people
-        print(endPoint.request)
+       let client = StarWarsApiClient()
+       /* client.retrievePeople { people, error in
+            print(people)
+        }*/
+        
+        let url = URL(fileReferenceLiteralResourceName: "https://swapi.co/api/planets/1/")
+        
+        client.retrieveHomeworld(homeURL: url) { home, error in
+           print("something happened")
+        }
+        
+       // let result = StarWarsApi.people
+       // print(result.request)
     }
 
     override func didReceiveMemoryWarning() {
