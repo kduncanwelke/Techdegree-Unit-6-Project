@@ -1,74 +1,79 @@
 //
-//  StarWarsAPIClient.swift
+//  Networking.swift
 //  The API Awakens
 //
-//  Created by Kate Duncan-Welke on 12/11/18.
+//  Created by Kate Duncan-Welke on 12/13/18.
 //  Copyright © 2018 Kate Duncan-Welke. All rights reserved.
 //
 
 import Foundation
 
+enum Endpoint {
+    case people(Int)
+    case starship(Int)
+    case vehicle(Int)
+    case planet(Int)
+    
+    func getUrl() -> String {
+        switch self {
+            case .people(let page): return "people/?page=\(page)"
+            case .starship(let page): return "starships/?page=\(page)"
+            case .vehicle(let page): return "people/?page=\(page)"
+            case .planet(let index): return "planets/\(index)"
+        }
+    }
+}
+
 class StarWarsApiClient {
-    let downloader = JSONDownloader()
+    let baseUrl = "https://swapi.co/api/"
+    let decoder = JSONDecoder()
+    let session: URLSession
     
-    func retrievePeople(completion: @escaping ([Person], DataError?) -> Void) {
-        let endpoint = StarWarsApi.people
-        
-        performRequest(with: endpoint) { results, error in
-            guard let results = results else {
-                completion([], error)
-                return
-            }
-            
-            let people = results.flatMap { Person(json: $0) }
-            
-            completion(people, nil)
-        }
+    init(configuration: URLSessionConfiguration) {
+        self.session = URLSession(configuration: configuration)
     }
     
-    func retrieveHomeworld(homeURL: URL, completion: @escaping (Homeworld?, DataError?) -> Void) {
-        let endpoint = URLRequest(url: homeURL)
-    
-        
-        let task = downloader.jsonTask(with: endpoint) { json, error in
-            DispatchQueue.main.async {
-                guard let json = json else {
-                    completion(nil, error)
-                    return
-                }
-                
-                guard let home = Homeworld(json: json) else {
-                    completion(nil, .jsonConversionFailure)
-                    return
-                }
-                
-                completion(home, nil)
-            }
-        }
-        task.resume()
-       
+    convenience init() {
+        self.init(configuration: .default)
     }
     
-    typealias Results = [[String: Any]]
+    typealias PersonCompletionHandler = ([Person]?, DataError?) -> Void
+    typealias CurrentWeatherCompletionHandler = ([Person]?, DataError?) -> Void
     
-    private func performRequest(with endpoint: Endpoint, completion: @escaping (Results?, DataError?) -> Void) {
+    private func getPeople(completionHandler completion: @escaping PersonCompletionHandler) {
         
-        let task = downloader.jsonTask(with: endpoint.request) { json, error in
+        guard let url = baseUrl + Endpoint.getUrl() else {
+            completion(nil, DataError.invalidUrl)
+            return
+        }
+        
+        let request = URLRequest(url: url)
+        
+        let task = session.dataTask(with: request) {data, response, error in
             DispatchQueue.main.async {
-                guard let json = json else {
+                if let data = data {
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        completion(nil, DataError.requestFailed)
+                        return
+                    }
+                    if httpResponse.statusCode == 200 {
+                        do {
+                            let person = try self.decoder.decode(Person.self, from: data)
+                            completion(person, nil)
+                        } catch let error {
+                            completion(nil, error)
+                        }
+                    } else {
+                        completion(nil, DataError.invalidData)
+                    }
+                } else if let error = error {
                     completion(nil, error)
-                    return
                 }
-                
-                guard let results = json["results"] as? [[String: Any]] else {
-                    completion(nil, .jsonConversionFailure)
-                    return
-                }
-                
-                completion(results, nil)
             }
         }
         
         task.resume()
     }
+    
+    
 }

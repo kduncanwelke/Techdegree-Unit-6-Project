@@ -9,8 +9,9 @@
 import Foundation
 
 enum DataError: Error {
+    case invalidUrl
     case requestFailed
     case jsonConversionFailure
     case invalidData
-    case badResponse
+    case badResponse(statusCode: Int)
 }
