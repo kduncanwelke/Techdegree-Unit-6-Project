@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2D22E08D21C2FC31007310D7 /* StarWarsAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D22E08C21C2FC31007310D7 /* StarWarsAPIClient.swift */; };
+		2D22E08D21C2FC31007310D7 /* Networker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D22E08C21C2FC31007310D7 /* Networker.swift */; };
 		2D22E08F21C32267007310D7 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D22E08E21C32267007310D7 /* Endpoint.swift */; };
 		2D60B20C21C2D8F800448581 /* Homeworld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D60B20B21C2D8F800448581 /* Homeworld.swift */; };
 		2D71252B21C0639500B1A851 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D71252A21C0639500B1A851 /* AppDelegate.swift */; };
@@ -20,12 +20,15 @@
 		2D71254121C066FC00B1A851 /* Starship.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D71254021C066FC00B1A851 /* Starship.swift */; };
 		2D71254321C067D400B1A851 /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D71254221C067D400B1A851 /* Vehicle.swift */; };
 		2D71254621C06B9F00B1A851 /* Species.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D71254521C06B9F00B1A851 /* Species.swift */; };
-		2D71254B21C0782600B1A851 /* JSONDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D71254A21C0782600B1A851 /* JSONDownloader.swift */; };
+		2D71254B21C0782600B1A851 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D71254A21C0782600B1A851 /* JSONDecoder.swift */; };
 		2D71254D21C07A0400B1A851 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D71254C21C07A0400B1A851 /* Errors.swift */; };
+		2DDA1BB421C4277400EF8F2E /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DDA1BB321C4277400EF8F2E /* Result.swift */; };
+		2DDA1BB621C42D0400EF8F2E /* PageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DDA1BB521C42D0400EF8F2E /* PageManager.swift */; };
+		2DDA1BB821C42EAA00EF8F2E /* PeopleDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DDA1BB721C42EAA00EF8F2E /* PeopleDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2D22E08C21C2FC31007310D7 /* StarWarsAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarWarsAPIClient.swift; sourceTree = "<group>"; };
+		2D22E08C21C2FC31007310D7 /* Networker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networker.swift; sourceTree = "<group>"; };
 		2D22E08E21C32267007310D7 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		2D60B20B21C2D8F800448581 /* Homeworld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Homeworld.swift; sourceTree = "<group>"; };
 		2D71252721C0639500B1A851 /* The API Awakens.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The API Awakens.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -40,8 +43,11 @@
 		2D71254021C066FC00B1A851 /* Starship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Starship.swift; sourceTree = "<group>"; };
 		2D71254221C067D400B1A851 /* Vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
 		2D71254521C06B9F00B1A851 /* Species.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Species.swift; sourceTree = "<group>"; };
-		2D71254A21C0782600B1A851 /* JSONDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDownloader.swift; sourceTree = "<group>"; };
+		2D71254A21C0782600B1A851 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		2D71254C21C07A0400B1A851 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		2DDA1BB321C4277400EF8F2E /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		2DDA1BB521C42D0400EF8F2E /* PageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageManager.swift; sourceTree = "<group>"; };
+		2DDA1BB721C42EAA00EF8F2E /* PeopleDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleDataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,9 +108,12 @@
 		2D71254921C077F800B1A851 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				2D22E08C21C2FC31007310D7 /* StarWarsAPIClient.swift */,
+				2D22E08C21C2FC31007310D7 /* Networker.swift */,
 				2D22E08E21C32267007310D7 /* Endpoint.swift */,
-				2D71254A21C0782600B1A851 /* JSONDownloader.swift */,
+				2DDA1BB321C4277400EF8F2E /* Result.swift */,
+				2D71254A21C0782600B1A851 /* JSONDecoder.swift */,
+				2DDA1BB521C42D0400EF8F2E /* PageManager.swift */,
+				2DDA1BB721C42EAA00EF8F2E /* PeopleDataManager.swift */,
 				2D71254C21C07A0400B1A851 /* Errors.swift */,
 			);
 			path = Networking;
@@ -184,14 +193,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D71254321C067D400B1A851 /* Vehicle.swift in Sources */,
+				2DDA1BB821C42EAA00EF8F2E /* PeopleDataManager.swift in Sources */,
+				2DDA1BB421C4277400EF8F2E /* Result.swift in Sources */,
 				2D71254621C06B9F00B1A851 /* Species.swift in Sources */,
-				2D22E08D21C2FC31007310D7 /* StarWarsAPIClient.swift in Sources */,
+				2D22E08D21C2FC31007310D7 /* Networker.swift in Sources */,
 				2D60B20C21C2D8F800448581 /* Homeworld.swift in Sources */,
 				2D71253D21C063FF00B1A851 /* Person.swift in Sources */,
 				2D71254121C066FC00B1A851 /* Starship.swift in Sources */,
 				2D71252D21C0639500B1A851 /* ViewController.swift in Sources */,
 				2D71254D21C07A0400B1A851 /* Errors.swift in Sources */,
-				2D71254B21C0782600B1A851 /* JSONDownloader.swift in Sources */,
+				2D71254B21C0782600B1A851 /* JSONDecoder.swift in Sources */,
+				2DDA1BB621C42D0400EF8F2E /* PageManager.swift in Sources */,
 				2D71252B21C0639500B1A851 /* AppDelegate.swift in Sources */,
 				2D22E08F21C32267007310D7 /* Endpoint.swift in Sources */,
 				2D71253F21C0660F00B1A851 /* Transportation.swift in Sources */,

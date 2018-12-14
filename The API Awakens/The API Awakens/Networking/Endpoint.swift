@@ -8,44 +8,29 @@
 
 import Foundation
 
-protocol Endpoint {
-    var base: String { get }
-    var path: String { get }
-}
-
-extension Endpoint {
-    var urlComponents: URLComponents {
-        var components = URLComponents(string: base)!
-        components.path = path
-        
-        return components
-    }
-    
-    var request: URLRequest {
-        let url = urlComponents.url!
-        return URLRequest(url: url)
-    }
-}
-
-enum StarWarsApi {
+enum Endpoint {
     case people
     case starships
     case vehicles
-}
-
-extension StarWarsApi: Endpoint {
-    var base: String {
-        return "https://swapi.co"
+    
+    private var baseURL: URL {
+        return URL(string: "https://swapi.co/api/")!
     }
     
-    var path: String {
+    func url(with page: Int) -> URL {
         switch self {
         case .people:
-            return "/api/people/"
+            var components = URLComponents(url: baseURL.appendingPathComponent("people"), resolvingAgainstBaseURL: false)
+            components!.queryItems = [URLQueryItem(name: "page", value: "\(page)")]
+            return components!.url!
         case .starships:
-            return "/api/starships/"
+            var components = URLComponents(url: baseURL.appendingPathComponent("starships"), resolvingAgainstBaseURL: false)
+            components!.queryItems = [URLQueryItem(name: "page", value: "\(page)")]
+            return components!.url!
         case .vehicles:
-            return "/api/vehicles/"
+            var components = URLComponents(url: baseURL.appendingPathComponent("vehicles"), resolvingAgainstBaseURL: false)
+            components!.queryItems = [URLQueryItem(name: "page", value: "\(page)")]
+            return components!.url!
         }
     }
 }

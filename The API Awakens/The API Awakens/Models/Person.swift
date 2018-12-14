@@ -8,24 +8,17 @@
 
 import Foundation
 
-struct Person: Decodable {
+struct Person: Codable {
     let name: String
-    let birthday: String
-    let homeWorld: String
+    let birthYear: String?
+    let gender: String?
     let height: String
     let eyeColor: String
-    let hairColor: String
-    //let species: [Species]
-    
-    enum CodingKeys: String, CodingKey {
-        case name = "name"
-        case birthday = "birth_year"
-        case homeWorld = "homeworld"
-        case height = "height"
-        case eyeColor = "eye_color"
-        case hairColor = "hair_color"
-        // case species = "species"
-    }
+    let hairColor: String?
+    let homeworld: URL?
+    let starships: [URL]?
+    let vehicles: [URL]?
+    let species: [URL]
 }
 
 

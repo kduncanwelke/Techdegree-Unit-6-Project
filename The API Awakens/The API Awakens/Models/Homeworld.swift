@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Homeworld {
+struct Homeworld: Codable {
     let name: String
 }
 

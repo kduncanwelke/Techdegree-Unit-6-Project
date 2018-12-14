@@ -11,17 +11,8 @@ import Foundation
 struct Starship: Transportation, Codable {
     let name: String
     let model: String
-    let cost: Int
+    let costInCredits: Int
     let length: Int
-    let type: String
+    let starshipClass: String
     let crew: Int
-    
-    enum CodingKeys: String, CodingKey {
-        case name = "name"
-        case model = "model"
-        case cost = "cost_in_credits"
-        case length = "length"
-        case type = "starship_class"
-        case crew = "crew"
-    }
 }

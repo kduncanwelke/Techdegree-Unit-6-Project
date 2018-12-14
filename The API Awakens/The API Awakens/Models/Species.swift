@@ -10,8 +10,4 @@ import Foundation
 
 struct Species: Codable {
     let name: String
-    
-    enum CodingKeys: String, CodingKey {
-        case name = "name"
-    }
 }

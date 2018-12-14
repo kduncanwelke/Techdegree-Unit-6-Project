@@ -11,17 +11,8 @@ import Foundation
 struct Vehicle: Transportation, Codable {
     let name: String
     let model: String
-    let cost: Int
+    let costInCredits: Int
     let length: Int
-    let type: String
+    let vehicleClass: String
     let crew: Int
-    
-    enum CodingKeys: String, CodingKey {
-        case name = "name"
-        case model = "model"
-        case cost = "cost_in_credits"
-        case length = "length"
-        case type = "vehicle_class"
-        case crew = "crew"
-    }
 }
