@@ -14,19 +14,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-      /* let client = StarWarsApiClient()
-       client.retrievePeople { people, error in
-        print(people)
-            for person in people {
-                client.retrieveHomeworld(homeURL: person.homeWorld) { home, error in
-                    print(home)
-                }
-            }
+        let client = StarWarsApiClient()
+        client.getPeople() { people, error in
+            print(people)
         }
-        
-        let result = StarWarsApi.people
-        print(result.request)*/
-       
         
     }
 

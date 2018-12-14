@@ -11,7 +11,7 @@ import Foundation
 struct Person: Decodable {
     let name: String
     let birthday: String
-    let homeWorld: URL
+    let homeWorld: String
     let height: String
     let eyeColor: String
     let hairColor: String

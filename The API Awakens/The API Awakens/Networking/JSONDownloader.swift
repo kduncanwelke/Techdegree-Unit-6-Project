@@ -44,7 +44,7 @@ class JSONDownloader {
                     completion(nil, .invalidData)
                 }
             } else {
-                completion(nil, .badResponse(statusCode: httpResponse.statusCode))
+                completion(nil, .badResponse)
             }
         }
         return task

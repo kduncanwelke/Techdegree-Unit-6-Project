@@ -13,5 +13,5 @@ enum DataError: Error {
     case requestFailed
     case jsonConversionFailure
     case invalidData
-    case badResponse(statusCode: Int)
+    case badResponse
 }
