@@ -19,7 +19,7 @@ class ViewController: UIViewController {
             case .success(let response):
                 for person in response.results {
                     print(person)
-                    PeopleDataManager.getHomeworld(for: person) { result in
+                    /*PeopleDataManager.getHomeworld(for: person) { result in
                         if let result = result {
                             switch result {
                             case .success(let home):
@@ -28,9 +28,9 @@ class ViewController: UIViewController {
                                 print(error)
                             }
                         }
-                    }
+                    }*/
                 }
-                for person in response.results {
+                /*for person in response.results {
                     PeopleDataManager.getSpecies(for: person) { result in
                         if let result = result {
                             switch result {
@@ -41,7 +41,7 @@ class ViewController: UIViewController {
                             }
                         }
                     }
-                }
+                }*/
             case .failure(let error):
                 print(error)
             }
