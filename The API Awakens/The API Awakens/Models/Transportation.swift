@@ -11,7 +11,7 @@ import Foundation
 protocol Transportation {
     var name: String { get }
     var model: String { get }
-    var costInCredits: Int { get }
-    var length: Int { get }
-    var crew: Int { get }
+    var costInCredits: String { get }
+    var length: String { get }
+    var crew: String { get }
 }

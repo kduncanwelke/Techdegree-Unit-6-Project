@@ -11,8 +11,8 @@ import Foundation
 struct Starship: Transportation, Codable {
     let name: String
     let model: String
-    let costInCredits: Int
-    let length: Int
+    let costInCredits: String
+    let length: String
     let starshipClass: String
-    let crew: Int
+    let crew: String
 }
