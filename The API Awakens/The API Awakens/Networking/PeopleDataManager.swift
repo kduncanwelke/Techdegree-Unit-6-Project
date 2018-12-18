@@ -9,18 +9,32 @@
 import Foundation
 
 struct PeopleDataManager {
-    static func getPeople(with page: Int, completion: @escaping (Result<HandlePages<Person>>) -> Void) {
-        Networker.getUrl(endpoint: Endpoint.people.url(with: page)) { result in
+    static func getAllPeople(completion: @escaping (Result<Person>) -> Void) {
+        var page = 1
+        getPeople(with: page) { result in
             switch result {
-            case .success(let data):
-                guard let people = try? JSONDecoder.starWarsApiDecoder.decode(HandlePages<Person>.self, from: data) else {
-                    return
+            case .success(let response):
+                while response.count > page {
+                    page += 1
                 }
-                completion(.success(people))
             case .failure(let error):
-                completion(.failure(error))
+                print(error)
             }
         }
+    }
+    
+    static func getPeople(with page: Int, completion: @escaping (Result<HandlePages<Person>>) -> Void) {
+            Networker.getUrl(endpoint: Endpoint.people.url(with: page)) { result in
+                switch result {
+                case .success(let data):
+                    guard let pagedResponse = try? JSONDecoder.starWarsApiDecoder.decode(HandlePages<Person>.self, from: data) else {
+                        return
+                    }
+                    completion(.success(pagedResponse))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
     }
     
     static func getHomeworld(for person: Person, completion: @escaping (Result<Homeworld>?) -> Void) {

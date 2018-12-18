@@ -13,10 +13,10 @@ struct StarshipDataManager {
         Networker.getUrl(endpoint: Endpoint.starships.url(with: page)) { result in
             switch result {
             case .success(let data):
-                guard let starships = try? JSONDecoder.starWarsApiDecoder.decode(HandlePages<Starship>.self, from: data) else {
+                guard let pagedResponse = try? JSONDecoder.starWarsApiDecoder.decode(HandlePages<Starship>.self, from: data) else {
                     return
                 }
-                completion(.success(starships))
+                completion(.success(pagedResponse))
             case .failure(let error):
                 completion(.failure(error))
             }

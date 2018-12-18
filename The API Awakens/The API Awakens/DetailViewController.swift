@@ -145,7 +145,7 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
                 }
             }
         case .vehicles:
-            VehilceDataManager.getVehicles(with: 1) { result in
+            VehicleDataManager.getVehicles(with: 1) { result in
                 switch result {
                 case .success(let response):
                     self.vehicleResults = response.results
