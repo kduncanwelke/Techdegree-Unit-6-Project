@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     // MARK: Outlets
     
@@ -28,9 +28,16 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var detail5: UILabel!
     @IBOutlet weak var detail6: UILabel!
     
+    @IBOutlet weak var picker: UIPickerView!
+    
     
     var selectedCategory: SelectedType?
     
+    var peopleResults: [Person]?
+    var starshipResults: [Starship]?
+    var vehicleResults: [Vehicle]?
+    
+    let dummyData = ["skgg", "kagff", "dhfkg"]
     //  MARK: Custom functions
     
     func updateLabels(category: SelectedType) {
@@ -94,6 +101,7 @@ class DetailViewController: UIViewController {
             PeopleDataManager.getPeople(with: 1) { result in
                 switch result {
                 case .success(let response):
+                    self.peopleResults = response.results
                     self.updateDataForPerson(with: response.results[0])
                     
                     for person in response.results {
@@ -120,6 +128,7 @@ class DetailViewController: UIViewController {
                             }
                         }
                     }
+                    self.picker.reloadAllComponents()
                 case .failure(let error):
                     print(error)
                 }
@@ -128,7 +137,9 @@ class DetailViewController: UIViewController {
             StarshipDataManager.getStarships(with: 1) { result in
                 switch result {
                 case .success(let response):
+                    self.starshipResults = response.results
                     self.updateDataForStarship(with: response.results[0])
+                    self.picker.reloadAllComponents()
                 case .failure(let error):
                     print(error)
                 }
@@ -137,7 +148,9 @@ class DetailViewController: UIViewController {
             VehilceDataManager.getVehicles(with: 1) { result in
                 switch result {
                 case .success(let response):
+                    self.vehicleResults = response.results
                     self.updateDataForVehicle(with: response.results[0])
+                    self.picker.reloadAllComponents()
                 case .failure(let error):
                     print(error)
                 }
@@ -149,6 +162,8 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        picker.delegate = self
+        picker.dataSource = self
         
         guard let category = selectedCategory else { return }
         
@@ -158,16 +173,64 @@ class DetailViewController: UIViewController {
         
         updateView(category: category)
       
-        
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
     }
-    */
+    
+    //MARK: - Delegates and data sources
+    //MARK: Data Sources
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        guard let selectedCategory = selectedCategory else { return 0 }
+        
+            switch selectedCategory {
+            case .characters:
+                guard let result = peopleResults?.count else { return 0 }
+                return result
+            case .starships:
+                guard let result = starshipResults?.count else { return 0 }
+                return result
+            case .vehicles:
+                guard let result = vehicleResults?.count else { return 0 }
+                return result
+            }
+    }
+    
+    //MARK: Delegates
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        guard let selectedCategory = selectedCategory else {
+            return nil
+        }
+        
+        switch selectedCategory {
+        case .characters:
+            guard let result = peopleResults else { return nil }
+            return result[row].name
+        case .starships:
+            guard let result = starshipResults else { return nil }
+            return result[row].name
+        case .vehicles:
+            guard let result = vehicleResults else { return nil }
+            return result[row].name
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        guard let selectedCategory = selectedCategory else {
+            return
+        }
+        
+        switch selectedCategory {
+        case .characters:
+            guard let result = peopleResults else { return }
+            updateDataForPerson(with: result[row])
+        case .starships:
+            guard let result = starshipResults else { return }
+            updateDataForStarship(with: result[row])
+        case .vehicles:
+            guard let result = vehicleResults else { return }
+            updateDataForVehicle(with: result[row])
+        }
     }
 }
