@@ -95,7 +95,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="yXl-fd-7VF">
-                                <rect key="frame" x="30" y="97.5" width="56" height="215.5"/>
+                                <rect key="frame" x="30" y="97.5" width="60" height="215.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1J-lQ-CxQ">
                                         <rect key="frame" x="0.0" y="0.0" width="53" height="19.5"/>
@@ -134,6 +134,9 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="Ys9-8x-f5x"/>
+                                </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="RjY-rm-p5C">
                                 <rect key="frame" x="273" y="130.5" width="86" height="29"/>
@@ -144,12 +147,18 @@
                                         <state key="normal" title="USD">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <state key="disabled">
+                                            <color key="titleColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                        </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yYh-5y-6N2">
                                         <rect key="frame" x="40" y="0.0" width="46" height="29"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                         <state key="normal" title="Credits">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <state key="disabled">
+                                            <color key="titleColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                         </state>
                                     </button>
                                 </subviews>
@@ -163,6 +172,12 @@
                                         <state key="normal" title="English">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <state key="disabled">
+                                            <color key="titleColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="convertToInches:" destination="HJa-Mj-rIt" eventType="touchUpInside" id="KiQ-yK-2oB"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CAa-Sk-feE">
                                         <rect key="frame" x="56" y="0.0" width="41" height="29"/>
@@ -170,11 +185,17 @@
                                         <state key="normal" title="Metric">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <state key="disabled">
+                                            <color key="titleColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="convertToCentimeters:" destination="HJa-Mj-rIt" eventType="touchUpInside" id="Gif-VI-IT7"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="ShN-EB-D7c">
-                                <rect key="frame" x="116" y="97.5" width="7.5" height="217"/>
+                                <rect key="frame" x="120" y="97.5" width="121.5" height="217"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FI0-JP-FYw">
                                         <rect key="frame" x="0.0" y="0.0" width="7.5" height="19.5"/>
@@ -188,7 +209,7 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="69r-Xv-pwy">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="69r-Xv-pwy">
                                         <rect key="frame" x="0.0" y="79" width="7.5" height="19.5"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -285,6 +306,7 @@
                             <constraint firstItem="SQU-Mj-QAM" firstAttribute="trailing" secondItem="viJ-us-kEp" secondAttribute="trailing" id="j0k-l8-SFm"/>
                             <constraint firstItem="0Nn-FZ-zS7" firstAttribute="leading" secondItem="viJ-us-kEp" secondAttribute="leading" id="qkA-He-D2X"/>
                             <constraint firstItem="SQU-Mj-QAM" firstAttribute="leading" secondItem="viJ-us-kEp" secondAttribute="leading" id="rbI-61-n0h"/>
+                            <constraint firstItem="T6x-gF-bWI" firstAttribute="leading" secondItem="ShN-EB-D7c" secondAttribute="trailing" constant="20" id="rdy-0S-KcR"/>
                             <constraint firstItem="ShN-EB-D7c" firstAttribute="top" secondItem="PRC-HZ-8EV" secondAttribute="bottom" constant="40" id="vhf-aY-C0J"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="viJ-us-kEp"/>
@@ -296,12 +318,14 @@
                         <outlet property="detail4" destination="hI7-9E-pP0" id="TiO-pL-pTU"/>
                         <outlet property="detail5" destination="BiR-sU-DLz" id="6cN-rm-L0h"/>
                         <outlet property="detail6" destination="Nen-1H-ksn" id="Ghd-Gy-7uA"/>
+                        <outlet property="englishButton" destination="T6x-gF-bWI" id="BCB-yK-UuC"/>
                         <outlet property="label1" destination="A1J-lQ-CxQ" id="1j3-6Z-RtG"/>
                         <outlet property="label2" destination="vXL-IF-JMK" id="rHH-JJ-4b1"/>
                         <outlet property="label3" destination="Sro-Id-sI0" id="IG0-HP-xbP"/>
                         <outlet property="label4" destination="455-xo-QPh" id="fbV-8G-guG"/>
                         <outlet property="label5" destination="1gk-DM-vu1" id="Nn4-Ep-jo8"/>
                         <outlet property="label6" destination="HYm-Ou-kJq" id="M9R-F9-k76"/>
+                        <outlet property="metricButton" destination="CAa-Sk-feE" id="cjZ-ck-onj"/>
                         <outlet property="nameLabel" destination="PRC-HZ-8EV" id="Fel-Ih-jvC"/>
                         <outlet property="picker" destination="0Nn-FZ-zS7" id="f6D-ve-GrP"/>
                     </connections>

@@ -31,13 +31,16 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     @IBOutlet weak var picker: UIPickerView!
     
     
+    @IBOutlet weak var englishButton: UIButton!
+    @IBOutlet weak var metricButton: UIButton!
+    
+    
     var selectedCategory: SelectedType?
     
     var peopleResults: [Person]?
     var starshipResults: [Starship]?
     var vehicleResults: [Vehicle]?
-    
-    let dummyData = ["skgg", "kagff", "dhfkg"]
+
     //  MARK: Custom functions
     
     func updateLabels(category: SelectedType) {
@@ -66,9 +69,32 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     func updateDataForPerson(with person: Person) {
         nameLabel.text = person.name
         detail1.text = person.birthYear
+        
+        PeopleDataManager.getHomeworld(for: person) { result in
+            if let result = result {
+                switch result {
+                case .success(let home):
+                    self.detail2.text = home.name
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+        
         detail3.text = person.height
         detail4.text = person.eyeColor
         detail5.text = person.hairColor
+        
+        PeopleDataManager.getSpecies(for: person) { result in
+            if let result = result {
+                switch result {
+                case .success(let species):
+                    self.detail6.text = species.name
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
         
         detail6.isHidden = false
     }
@@ -98,30 +124,54 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     func updateView(category: SelectedType) {
         switch category {
         case .characters:
-            PeopleDataManager.getPeople(with: 1) { result in
+            PeopleDataManager.getPeople() { result in
                 switch result {
                 case .success(let response):
-                    self.peopleResults = response.results
-                    self.updateDataForPerson(with: response.results[0])
+                    print(response)
+                    self.peopleResults = response
+                    self.updateDataForPerson(with: response[0])
                     
-                    for person in response.results {
+                    // load home and species for first item separately to prevent weird display with loop spitting out data
+                    PeopleDataManager.getHomeworld(for: response[0]) { result in
+                        if let result = result {
+                            switch result {
+                            case .success(let home):
+                                self.detail2.text = home.name
+                            case .failure(let error):
+                                print(error)
+                            }
+                        }
+                    }
+                    
+                    PeopleDataManager.getSpecies(for: response[0]) { result in
+                        if let result = result {
+                            switch result {
+                            case .success(let species):
+                                self.detail6.text = species.name
+                            case .failure(let error):
+                                print(error)
+                            }
+                        }
+                    }
+                    
+                    for person in response {
                         PeopleDataManager.getHomeworld(for: person) { result in
                             if let result = result {
                                 switch result {
                                 case .success(let home):
-                                    self.detail2.text = home.name
+                                    print(home)
                                 case .failure(let error):
                                     print(error)
                                 }
                             }
                         }
                     }
-                    for person in response.results {
+                    for person in response {
                         PeopleDataManager.getSpecies(for: person) { result in
                             if let result = result {
                                 switch result {
                                 case .success(let species):
-                                    self.detail6.text = species.name
+                                     print(species)
                                 case .failure(let error):
                                     print(error)
                                 }
@@ -129,27 +179,28 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
                         }
                     }
                     self.picker.reloadAllComponents()
+                    
                 case .failure(let error):
                     print(error)
                 }
             }
         case .starships:
-            StarshipDataManager.getStarships(with: 1) { result in
+            StarshipDataManager.getStarships() { result in
                 switch result {
                 case .success(let response):
-                    self.starshipResults = response.results
-                    self.updateDataForStarship(with: response.results[0])
+                    self.starshipResults = response
+                    self.updateDataForStarship(with: response[0])
                     self.picker.reloadAllComponents()
                 case .failure(let error):
                     print(error)
                 }
             }
         case .vehicles:
-            VehicleDataManager.getVehicles(with: 1) { result in
+            VehicleDataManager.getVehicles() { result in
                 switch result {
                 case .success(let response):
-                    self.vehicleResults = response.results
-                    self.updateDataForVehicle(with: response.results[0])
+                    self.vehicleResults = response
+                    self.updateDataForVehicle(with: response[0])
                     self.picker.reloadAllComponents()
                 case .failure(let error):
                     print(error)
@@ -162,6 +213,10 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        // start with metric button disabled because data comes in metric form
+        metricButton.isEnabled = false
+        
         picker.delegate = self
         picker.dataSource = self
         
@@ -233,4 +288,25 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             updateDataForVehicle(with: result[row])
         }
     }
+    
+    // MARK: Actions
+    
+    @IBAction func convertToInches(_ sender: UIButton) {
+        guard let number = Double(detail3.text!) else { return }
+        let result = number * 2.54
+        detail3.text = String(describing: result)
+        
+        englishButton.isEnabled = false
+        metricButton.isEnabled = true
+    }
+    
+    @IBAction func convertToCentimeters(_ sender: UIButton) {
+        guard let number = Double(detail3.text!) else { return }
+        let result = number / 2.54
+        detail3.text = String(describing: result)
+        
+        metricButton.isEnabled = false
+        englishButton.isEnabled = true
+    }
+    
 }

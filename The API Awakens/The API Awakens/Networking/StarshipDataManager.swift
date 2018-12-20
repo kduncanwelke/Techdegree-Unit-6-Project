@@ -9,8 +9,8 @@
 import Foundation
 
 struct StarshipDataManager {
-    static func getStarships(with page: Int, completion: @escaping (Result<HandlePages<Starship>>) -> Void) {
-        Networker.getUrl(endpoint: Endpoint.starships.url(with: page)) { result in
+    private static func fetch(url: URL, completion: @escaping (Result<HandlePages<Starship>>) -> Void) {
+        Networker.fetchData(url: url) { result in
             switch result {
             case .success(let data):
                 guard let pagedResponse = try? JSONDecoder.starWarsApiDecoder.decode(HandlePages<Starship>.self, from: data) else {
@@ -21,5 +21,34 @@ struct StarshipDataManager {
                 completion(.failure(error))
             }
         }
+    }
+    
+    static func fetch(with page: Int, completion: @escaping (Result<[Starship]>) -> Void) {
+        fetch(url: Endpoint.starships.url(with: page)) { result in
+            switch result {
+            case .success(let result):
+                completion(.success(result.results))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    static func getStarships(completion: @escaping (Result<[Starship]>) -> Void) {
+        var resultArray = [Starship]()
+        func handle(result: Result<HandlePages<Starship>>) {
+            switch result {
+            case .success(let response):
+                resultArray.append(contentsOf: response.results)
+                if let nextURL = response.next {
+                    fetch(url: nextURL, completion: handle)
+                } else {
+                    completion(.success(resultArray))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+        fetch(url: Endpoint.starships.url(with: 1), completion: handle)
     }
 }

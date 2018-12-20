@@ -18,7 +18,7 @@ struct Person: Codable {
     let homeworld: URL?
     let starships: [URL]?
     let vehicles: [URL]?
-    let species: [URL]
+    let species: [URL]?
 }
 
 
