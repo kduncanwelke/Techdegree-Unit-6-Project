@@ -347,28 +347,47 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         
     }
 
+    func checkConversionInput(textInput: String) throws {
+        guard let number = Double(textInput) else {
+            throw CostConversion.invalidInput
+        }
+        self.input = number
+        
+        if number == 0 || number < 0 {
+            throw CostConversion.zeroOrNegativeInput
+        }
+        
+        if self.usdButton.isEnabled == false {
+            guard let input = self.input else { return }
+            guard let credits = Double(self.detail2.text!) else { return }
+            let result = credits / input
+            
+            self.detail2.text = String(describing: result)
+        } else if self.creditButton.isEnabled == false {
+            guard let input = self.input else { return }
+            guard let usd = Double(self.detail2.text!) else { return }
+            let result = usd * input
+            
+            self.detail2.text = String(describing: result)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
-            let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
+            let textField = alert?.textFields![0] // Force unwrapping because we know it exists
             guard let textInput = textField?.text else { return }
-            guard let number = Double(textInput) else { return }
-            self.input = number
             
-            if self.usdButton.isEnabled == false {
-                guard let input = self.input else { return }
-                guard let credits = Double(self.detail2.text!) else { return }
-                let result = credits / input
-                
-                self.detail2.text = String(describing: result)
-            } else if self.creditButton.isEnabled == false {
-                guard let input = self.input else { return }
-                guard let usd = Double(self.detail2.text!) else { return }
-                let result = usd * input
-                
-                self.detail2.text = String(describing: result)
+            do {
+                try self.checkConversionInput(textInput: textInput)
+            } catch CostConversion.invalidInput {
+                self.showAlert(title: "Conversion failed", message: CostConversion.invalidInput.localizedDescription)
+            } catch CostConversion.zeroOrNegativeInput {
+                self.showAlert(title: "Invalid input", message: CostConversion.zeroOrNegativeInput.localizedDescription)
+            } catch let error {
+                print("\(error)")
             }
         }))
         
@@ -459,24 +478,12 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         creditButton.isEnabled = true
         usdButton.isEnabled = false
         self.present(alert, animated: true, completion: nil)
-        
-        //guard let input = input else { return }
-        //guard let credits = Double(detail2.text!) else { return }
-        //let result = credits / input
-        
-        //detail2.text = String(describing: result)
     }
     
     @IBAction func convertToCredits(_ sender: UIButton) {
         usdButton.isEnabled = true
         creditButton.isEnabled = false
         self.present(alert, animated: true, completion: nil)
-        
-        //guard let input = input else { return }
-        //guard let usd = Double(detail2.text!) else { return }
-        //let result = usd * input
-        
-        //detail2.text = String(describing: result)
     }
     
     @IBAction func convertToInches(_ sender: UIButton) {
