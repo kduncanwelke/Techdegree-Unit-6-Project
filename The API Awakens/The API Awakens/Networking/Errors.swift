@@ -9,11 +9,18 @@
 import Foundation
 
 enum DataError: Error {
-    case invalidUrl
-    case requestFailed
-    case jsonConversionFailure
-    case invalidData
+    //case invalidUrl
+    //case requestFailed
+    //case jsonConversionFailure
+    //case invalidData
     case badResponse
+    
+    var localizedDescription: String {
+        switch self {
+        case .badResponse:
+            return "Bad response from server - please check your connection."
+        }
+    }
 }
 
 enum CostConversion: Error {

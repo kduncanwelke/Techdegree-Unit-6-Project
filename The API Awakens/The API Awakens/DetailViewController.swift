@@ -319,6 +319,7 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
                     
                 case .failure(let error):
                     print(error)
+                    self.showAlert(title: "Network error", message: DataError.badResponse.localizedDescription)
                 }
             }
         case .starships:
@@ -330,6 +331,7 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
                     self.picker.reloadAllComponents()
                 case .failure(let error):
                     print(error)
+                    self.showAlert(title: "Network error", message: DataError.badResponse.localizedDescription)
                 }
             }
         case .vehicles:
@@ -341,6 +343,7 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
                     self.picker.reloadAllComponents()
                 case .failure(let error):
                     print(error)
+                    self.showAlert(title: "Network error", message: DataError.badResponse.localizedDescription)
                 }
             }
         }
