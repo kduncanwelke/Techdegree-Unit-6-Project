@@ -41,6 +41,14 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     @IBOutlet weak var largeNameLabel: UILabel!
     
     
+    @IBOutlet weak var shipsLabel: UILabel!
+    @IBOutlet weak var vehiclesLabel: UILabel!
+    
+    @IBOutlet weak var associatedShipsLabel: UILabel!
+    @IBOutlet weak var associatedVehiclesLabel: UILabel!
+    @IBOutlet weak var associatedLabel: UILabel!
+    
+    
     var selectedCategory: SelectedType?
     
     var peopleResults: [Person]?
@@ -69,6 +77,13 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             
             usdButton.isHidden = true
             creditButton.isHidden = true
+            
+            shipsLabel.isHidden = false
+            vehiclesLabel.isHidden = false
+            
+            associatedLabel.isHidden = false
+            associatedShipsLabel.isHidden = false
+            associatedVehiclesLabel.isHidden = false
         case .vehicles:
             label1.text = "Make"
             label2.text = "Cost"
@@ -81,6 +96,13 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             
             usdButton.isHidden = false
             creditButton.isHidden = false
+            
+            shipsLabel.isHidden = true
+            vehiclesLabel.isHidden = true
+            
+            associatedLabel.isHidden = true
+            associatedShipsLabel.isHidden = true
+            associatedVehiclesLabel.isHidden = true
         case .starships:
             label1.text = "Make"
             label2.text = "Cost"
@@ -93,6 +115,13 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             
             usdButton.isHidden = false
             creditButton.isHidden = false
+            
+            shipsLabel.isHidden = true
+            vehiclesLabel.isHidden = true
+            
+            associatedLabel.isHidden = true
+            associatedShipsLabel.isHidden = true
+            associatedVehiclesLabel.isHidden = true
         }
     }
     
@@ -127,6 +156,40 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         }
         
         detail6.isHidden = false
+        
+        PeopleDataManager.getPersonVehicles(for: person) { result in
+            if let result = result {
+                switch result {
+                case .success(let vehicles):
+                    var vehiclesList = ""
+                    for vehicle in vehicles {
+                        vehiclesList += "\(vehicle), "
+                    }
+                    self.associatedVehiclesLabel.text = vehiclesList
+                case .failure(let error):
+                    print(error)
+                }
+            } else  {
+                self.associatedVehiclesLabel.text = "-"
+            }
+        }
+        
+        PeopleDataManager.getPersonStarships(for: person) { result in
+            if let result = result {
+                switch result {
+                case .success(let starships):
+                    var starshipsList = ""
+                    for starship in starships {
+                        starshipsList += "\(starship), "
+                    }
+                    self.associatedShipsLabel.text = starshipsList
+                case .failure(let error):
+                    print(error)
+                }
+            } else  {
+                self.associatedShipsLabel.text = "-"
+            }
+        }
         
         guard let people = peopleResults else { return }
         let result = findTallestAndShortestPerson(input: people)
@@ -172,7 +235,6 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             PeopleDataManager.getPeople() { result in
                 switch result {
                 case .success(let response):
-                    print(response)
                     self.peopleResults = response
                     self.updateDataForPerson(with: response[0])
                     
@@ -193,6 +255,36 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
                             switch result {
                             case .success(let species):
                                 self.detail6.text = species.name
+                            case .failure(let error):
+                                print(error)
+                            }
+                        }
+                    }
+                    
+                    PeopleDataManager.getPersonVehicles(for: response[0]) { result in
+                        if let result = result {
+                            switch result {
+                            case .success(let vehicles):
+                                var vehiclesList = ""
+                                for vehicle in vehicles {
+                                    vehiclesList += "\(vehicle), "
+                                }
+                                self.associatedVehiclesLabel.text = vehiclesList
+                            case .failure(let error):
+                                print(error)
+                            }
+                        }
+                    }
+                    
+                    PeopleDataManager.getPersonStarships(for: response[0]) { result in
+                        if let result = result {
+                            switch result {
+                            case .success(let starships):
+                                var starshipsList = ""
+                                for starship in starships {
+                                    starshipsList += "\(starship), "
+                                }
+                                self.associatedShipsLabel.text = starshipsList
                             case .failure(let error):
                                 print(error)
                             }

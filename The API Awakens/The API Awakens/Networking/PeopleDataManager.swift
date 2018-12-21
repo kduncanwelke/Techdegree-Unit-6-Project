@@ -89,4 +89,55 @@ struct PeopleDataManager {
             }
         }
     }
+    
+    static func getPersonVehicles(for person: Person, completion: @escaping (Result<[String]>?) -> Void) {
+        if let vehicles = person.vehicles {
+            if vehicles.isEmpty != true {
+                var vehicleNames = [String]()
+                var i = 0
+                for vehicle in vehicles {
+                    Networker.fetchData(url: vehicle) { result in
+                        switch result {
+                        case .success(let response):
+                            guard let vehicle = try? JSONDecoder.starWarsApiDecoder.decode(Vehicle.self, from: response) else { return }
+                            vehicleNames.append(vehicle.name)
+                            i += 1
+                            
+                            if i == vehicles.count {
+                                completion(.success(vehicleNames))
+                            }
+                        case .failure(let error):
+                            completion(.failure(error))
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    static func getPersonStarships(for person: Person, completion: @escaping (Result<[String]>?) -> Void) {
+        if let starships = person.starships {
+            if starships.isEmpty != true {
+                var starshipNames = [String]()
+                var i = 0
+                for starship in starships {
+                    Networker.fetchData(url: starship) { result in
+                        switch result {
+                        case .success(let response):
+                            guard let starship = try? JSONDecoder.starWarsApiDecoder.decode(Starship.self, from: response) else { return }
+                            starshipNames.append(starship.name)
+                            i += 1
+                            
+                            if i == starships.count {
+                                completion(.success(starshipNames))
+                            }
+                        case .failure(let error):
+                            completion(.failure(error))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
