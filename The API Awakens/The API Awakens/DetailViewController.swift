@@ -34,12 +34,22 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     @IBOutlet weak var englishButton: UIButton!
     @IBOutlet weak var metricButton: UIButton!
     
+    @IBOutlet weak var usdButton: UIButton!
+    @IBOutlet weak var creditButton: UIButton!
+    
+    @IBOutlet weak var smallNameLabel: UILabel!
+    @IBOutlet weak var largeNameLabel: UILabel!
+    
     
     var selectedCategory: SelectedType?
     
     var peopleResults: [Person]?
     var starshipResults: [Starship]?
     var vehicleResults: [Vehicle]?
+    
+    var input: Double?
+    
+    let alert = UIAlertController(title: "Conversion", message: "Please enter a conversion rate", preferredStyle: UIAlertController.Style.alert)
 
     //  MARK: Custom functions
     
@@ -55,7 +65,11 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             label6.text = "Species"
             
             label6.isHidden = false
-        case .vehicles, .starships:
+            detail6.isHidden = false
+            
+            usdButton.isHidden = true
+            creditButton.isHidden = true
+        case .vehicles:
             label1.text = "Make"
             label2.text = "Cost"
             label3.text = "Length"
@@ -63,6 +77,22 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             label5.text = "Crew"
             
             label6.isHidden = true
+            detail6.isHidden = true
+            
+            usdButton.isHidden = false
+            creditButton.isHidden = false
+        case .starships:
+            label1.text = "Make"
+            label2.text = "Cost"
+            label3.text = "Length"
+            label4.text = "Class"
+            label5.text = "Crew"
+            
+            label6.isHidden = true
+            detail6.isHidden = true
+            
+            usdButton.isHidden = false
+            creditButton.isHidden = false
         }
     }
     
@@ -97,6 +127,11 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         }
         
         detail6.isHidden = false
+        
+        guard let people = peopleResults else { return }
+        let result = findTallestAndShortestPerson(input: people)
+        largeNameLabel.text = result.0?.name
+        smallNameLabel.text = result.1?.name
     }
     
     func updateDataForStarship(with starship: Starship) {
@@ -108,6 +143,11 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         detail5.text = starship.crew
         
         detail6.isHidden = true
+        
+        guard let starships = starshipResults else { return }
+        let result = findLargestAndSmallestTransport(input: starships)
+        largeNameLabel.text = result.0?.name
+        smallNameLabel.text = result.1?.name
     }
     
     func updateDataForVehicle(with vehicle: Vehicle) {
@@ -119,6 +159,11 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         detail5.text = vehicle.crew
         
         detail6.isHidden = true
+        
+        guard let vehicles = vehicleResults else { return }
+        let result = findLargestAndSmallestTransport(input: vehicles)
+        largeNameLabel.text = result.0?.name
+        smallNameLabel.text = result.1?.name
     }
     
     func updateView(category: SelectedType) {
@@ -214,8 +259,34 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        // start with metric button disabled because data comes in metric form
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+            let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
+            guard let textInput = textField?.text else { return }
+            guard let number = Double(textInput) else { return }
+            self.input = number
+            
+            if self.usdButton.isEnabled == false {
+                guard let input = self.input else { return }
+                guard let credits = Double(self.detail2.text!) else { return }
+                let result = credits / input
+                
+                self.detail2.text = String(describing: result)
+            } else if self.creditButton.isEnabled == false {
+                guard let input = self.input else { return }
+                guard let usd = Double(self.detail2.text!) else { return }
+                let result = usd * input
+                
+                self.detail2.text = String(describing: result)
+            }
+        }))
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "Enter a number"
+        }
+      
+        // start with metric and credit button disabled because data comes in these forms
         metricButton.isEnabled = false
+        creditButton.isEnabled = false
         
         picker.delegate = self
         picker.dataSource = self
@@ -290,6 +361,31 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     }
     
     // MARK: Actions
+    
+    
+    @IBAction func convertToUSD(_ sender: UIButton) {
+        creditButton.isEnabled = true
+        usdButton.isEnabled = false
+        self.present(alert, animated: true, completion: nil)
+        
+        //guard let input = input else { return }
+        //guard let credits = Double(detail2.text!) else { return }
+        //let result = credits / input
+        
+        //detail2.text = String(describing: result)
+    }
+    
+    @IBAction func convertToCredits(_ sender: UIButton) {
+        usdButton.isEnabled = true
+        creditButton.isEnabled = false
+        self.present(alert, animated: true, completion: nil)
+        
+        //guard let input = input else { return }
+        //guard let usd = Double(detail2.text!) else { return }
+        //let result = usd * input
+        
+        //detail2.text = String(describing: result)
+    }
     
     @IBAction func convertToInches(_ sender: UIButton) {
         guard let number = Double(detail3.text!) else { return }
