@@ -40,6 +40,7 @@ class ViewController: UIViewController {
         performSegue(withIdentifier: "goToDetailView", sender: (Any).self)
     }
     
+    // pass selected type through to detail view
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.destination is DetailViewController {
             let destinationViewController = segue.destination as? DetailViewController

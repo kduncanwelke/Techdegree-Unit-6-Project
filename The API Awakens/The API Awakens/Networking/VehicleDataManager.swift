@@ -51,4 +51,17 @@ struct VehicleDataManager {
         }
         fetch(url: Endpoint.vehicles.url(with: 1), completion: handle)
     }
+    
+    static func findLargestAndSmallestTransport(input: [Transportation]) -> (Transportation?, Transportation?) {
+        let sorted = input.sorted(by: { if let length1 = Int($0.length), let length2 = Int($1.length) {
+            return length1 > length2
+            }
+            return true
+        })
+        let largest = sorted.first
+        let smallest = sorted.last
+        
+        return (largest, smallest)
+    }
+
 }

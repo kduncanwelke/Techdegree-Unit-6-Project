@@ -8,6 +8,7 @@
 
 import Foundation
 
+// species for person
 struct Species: Codable {
     let name: String
 }

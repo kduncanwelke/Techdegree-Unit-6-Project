@@ -8,6 +8,7 @@
 
 import Foundation
 
+// homeworld for person
 struct Homeworld: Codable {
     let name: String
 }

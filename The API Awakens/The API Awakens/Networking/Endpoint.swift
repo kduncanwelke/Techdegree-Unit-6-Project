@@ -17,6 +17,7 @@ enum Endpoint {
         return URL(string: "https://swapi.co/api/")!
     }
     
+    // generate endpoint based on type
     func url(with page: Int) -> URL {
         switch self {
         case .people:

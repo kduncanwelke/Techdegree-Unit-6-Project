@@ -139,5 +139,17 @@ struct PeopleDataManager {
             }
         }
     }
+    
+    static func findTallestAndShortestPerson(input: [Person]) -> (Person?, Person?) {
+        let sorted = input.sorted(by: { if let height1 = Int($0.height), let height2 = Int($1.height) {
+            return height1 > height2
+            }
+            return true
+        })
+        let tallest = sorted.first
+        let shortest = sorted.last
+        
+        return (tallest, shortest)
+    }
 
 }

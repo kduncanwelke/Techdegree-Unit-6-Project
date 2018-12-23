@@ -61,6 +61,8 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
 
     //  MARK: Custom functions
     
+    
+    // handle hiding and showing labels depending on view
     func updateLabels(category: SelectedType) {
         guard let selectedCategory = selectedCategory else { return }
         switch selectedCategory {
@@ -125,127 +127,140 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         }
     }
     
+    // update displayed data based on selected person
     func updateDataForPerson(with person: Person) {
-        nameLabel.text = person.name
-        detail1.text = person.birthYear
-        
-        PeopleDataManager.getHomeworld(for: person) { result in
-            if let result = result {
-                switch result {
-                case .success(let home):
-                    self.detail2.text = home.name
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-        
-        detail3.text = person.height
-        detail4.text = person.eyeColor
-        detail5.text = person.hairColor
-        
-        PeopleDataManager.getSpecies(for: person) { result in
-            if let result = result {
-                switch result {
-                case .success(let species):
-                    self.detail6.text = species.name
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-        
-        detail6.isHidden = false
-        
-        PeopleDataManager.getPersonVehicles(for: person) { result in
-            if let result = result {
-                switch result {
-                case .success(let vehicles):
-                    var vehiclesList = ""
-                    for vehicle in vehicles {
-                        vehiclesList += "\(vehicle), "
+        DispatchQueue.main.async {
+            self.nameLabel.text = person.name
+            self.detail1.text = person.birthYear
+            self.associatedVehiclesLabel.text = ""
+            self.associatedShipsLabel.text = ""
+            
+            PeopleDataManager.getHomeworld(for: person) { result in
+                if let result = result {
+                    switch result {
+                    case .success(let home):
+                        DispatchQueue.main.async {
+                            self.detail2.text = home.name
+                        }
+                    case .failure(let error):
+                        print(error)
                     }
-                    self.associatedVehiclesLabel.text = vehiclesList
-                case .failure(let error):
-                    print(error)
                 }
-            } else  {
-                self.associatedVehiclesLabel.text = "-"
             }
-        }
-        
-        PeopleDataManager.getPersonStarships(for: person) { result in
-            if let result = result {
-                switch result {
-                case .success(let starships):
-                    var starshipsList = ""
-                    for starship in starships {
-                        starshipsList += "\(starship), "
+            
+            self.detail3.text = person.height
+            self.detail4.text = person.eyeColor
+            self.detail5.text = person.hairColor
+            
+            PeopleDataManager.getSpecies(for: person) { result in
+                if let result = result {
+                    switch result {
+                    case .success(let species):
+                        DispatchQueue.main.async {
+                            self.detail6.text = species.name
+                        }
+                    case .failure(let error):
+                        print(error)
                     }
-                    self.associatedShipsLabel.text = starshipsList
-                case .failure(let error):
-                    print(error)
                 }
-            } else  {
-                self.associatedShipsLabel.text = "-"
             }
+            
+            self.detail6.isHidden = false
+            
+            PeopleDataManager.getPersonVehicles(for: person) { result in
+                if let result = result {
+                    switch result {
+                    case .success(let vehicles):
+                        DispatchQueue.main.async {
+                            self.associatedVehiclesLabel.text = String(describing: vehicles).replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "\"", with: "")
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+            
+            PeopleDataManager.getPersonStarships(for: person) { result in
+                if let result = result {
+                    switch result {
+                    case .success(let starships):
+                        DispatchQueue.main.async {
+                            self.associatedShipsLabel.text = String(describing: starships).replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").replacingOccurrences(of: "\"", with: "")
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+            
+            guard let people = self.peopleResults else { return }
+            let result = PeopleDataManager.findTallestAndShortestPerson(input: people)
+            self.largeNameLabel.text = result.0?.name
+            self.smallNameLabel.text = result.1?.name
         }
-        
-        guard let people = peopleResults else { return }
-        let result = findTallestAndShortestPerson(input: people)
-        largeNameLabel.text = result.0?.name
-        smallNameLabel.text = result.1?.name
     }
     
+    
+    // update data based on selected starship
     func updateDataForStarship(with starship: Starship) {
-        nameLabel.text = starship.name
-        detail1.text = starship.model
-        detail2.text = starship.costInCredits
-        detail3.text = starship.length
-        detail4.text = starship.starshipClass
-        detail5.text = starship.crew
-        
-        detail6.isHidden = true
-        
-        guard let starships = starshipResults else { return }
-        let result = findLargestAndSmallestTransport(input: starships)
-        largeNameLabel.text = result.0?.name
-        smallNameLabel.text = result.1?.name
+        DispatchQueue.main.async {
+            self.nameLabel.text = starship.name
+            self.detail1.text = starship.model
+            self.detail2.text = starship.costInCredits
+            self.detail3.text = starship.length
+            self.detail4.text = starship.starshipClass
+            self.detail5.text = starship.crew
+            
+            self.detail6.isHidden = true
+            
+            guard let starships = self.starshipResults else { return }
+            let result = StarshipDataManager.findLargestAndSmallestTransport(input: starships)
+            self.largeNameLabel.text = result.0?.name
+            self.smallNameLabel.text = result.1?.name
+        }
     }
     
+    
+    // update data based on selected vehicle
     func updateDataForVehicle(with vehicle: Vehicle) {
-        nameLabel.text = vehicle.name
-        detail1.text = vehicle.model
-        detail2.text = vehicle.costInCredits
-        detail3.text = vehicle.length
-        detail4.text = vehicle.vehicleClass
-        detail5.text = vehicle.crew
-        
-        detail6.isHidden = true
-        
-        guard let vehicles = vehicleResults else { return }
-        let result = findLargestAndSmallestTransport(input: vehicles)
-        largeNameLabel.text = result.0?.name
-        smallNameLabel.text = result.1?.name
+        DispatchQueue.main.async {
+            self.nameLabel.text = vehicle.name
+            self.detail1.text = vehicle.model
+            self.detail2.text = vehicle.costInCredits
+            self.detail3.text = vehicle.length
+            self.detail4.text = vehicle.vehicleClass
+            self.detail5.text = vehicle.crew
+            
+            self.detail6.isHidden = true
+            
+            guard let vehicles = self.vehicleResults else { return }
+            let result = VehicleDataManager.findLargestAndSmallestTransport(input: vehicles)
+            self.largeNameLabel.text = result.0?.name
+            self.smallNameLabel.text = result.1?.name
+        }
     }
     
+    // handle view updates with networking
     func updateView(category: SelectedType) {
         switch category {
         case .characters:
+            DispatchQueue.main.async {
             PeopleDataManager.getPeople() { result in
                 switch result {
                 case .success(let response):
                     self.peopleResults = response
                     self.updateDataForPerson(with: response[0])
                     
-                    // load home and species for first item separately to prevent weird display with loop spitting out data
+                    // load home and species for first item separately to prevent weird display with loop spitting out data into labels
                     PeopleDataManager.getHomeworld(for: response[0]) { result in
                         if let result = result {
                             switch result {
                             case .success(let home):
-                                self.detail2.text = home.name
+                                DispatchQueue.main.async {
+                                    self.detail2.text = home.name
+                                }
                             case .failure(let error):
-                                print(error)
+                                self.showAlert(title: "Encountered error", message: error.localizedDescription)
                             }
                         }
                     }
@@ -254,9 +269,11 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
                         if let result = result {
                             switch result {
                             case .success(let species):
-                                self.detail6.text = species.name
+                                DispatchQueue.main.async {
+                                    self.detail6.text = species.name
+                                }
                             case .failure(let error):
-                                print(error)
+                                self.showAlert(title: "Encountered error", message: error.localizedDescription)
                             }
                         }
                     }
@@ -269,9 +286,11 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
                                 for vehicle in vehicles {
                                     vehiclesList += "\(vehicle), "
                                 }
-                                self.associatedVehiclesLabel.text = vehiclesList
+                                DispatchQueue.main.async {
+                                    self.associatedVehiclesLabel.text = vehiclesList
+                                }
                             case .failure(let error):
-                                print(error)
+                                self.showAlert(title: "Encountered error", message: error.localizedDescription)
                             }
                         }
                     }
@@ -284,13 +303,16 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
                                 for starship in starships {
                                     starshipsList += "\(starship), "
                                 }
-                                self.associatedShipsLabel.text = starshipsList
+                                DispatchQueue.main.async {
+                                    self.associatedShipsLabel.text = starshipsList
+                                }
                             case .failure(let error):
-                                print(error)
+                                self.showAlert(title: "Encountered error", message: error.localizedDescription)
                             }
                         }
                     }
                     
+                    // load homeworlds for people
                     for person in response {
                         PeopleDataManager.getHomeworld(for: person) { result in
                             if let result = result {
@@ -298,11 +320,13 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
                                 case .success(let home):
                                     print(home)
                                 case .failure(let error):
-                                    print(error)
+                                    self.showAlert(title: "Encountered error", message: error.localizedDescription)
                                 }
                             }
                         }
                     }
+                    
+                    // load species for people
                     for person in response {
                         PeopleDataManager.getSpecies(for: person) { result in
                             if let result = result {
@@ -310,52 +334,71 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
                                 case .success(let species):
                                      print(species)
                                 case .failure(let error):
-                                    print(error)
+                                    self.showAlert(title: "Encountered error", message: error.localizedDescription)
                                 }
                             }
                         }
                     }
-                    self.picker.reloadAllComponents()
+                    // update picker with info
+                    DispatchQueue.main.async {
+                        self.picker.reloadAllComponents()
+                    }
                     
                 case .failure(let error):
                     print(error)
                     self.showAlert(title: "Network error", message: DataError.badResponse.localizedDescription)
                 }
             }
+            }
         case .starships:
+            DispatchQueue.main.async {
             StarshipDataManager.getStarships() { result in
                 switch result {
                 case .success(let response):
                     self.starshipResults = response
                     self.updateDataForStarship(with: response[0])
-                    self.picker.reloadAllComponents()
+                    
+                     // update picker with info
+                    DispatchQueue.main.async {
+                        self.picker.reloadAllComponents()
+                    }
                 case .failure(let error):
                     print(error)
                     self.showAlert(title: "Network error", message: DataError.badResponse.localizedDescription)
                 }
             }
+            }
         case .vehicles:
+            DispatchQueue.main.async {
             VehicleDataManager.getVehicles() { result in
                 switch result {
                 case .success(let response):
                     self.vehicleResults = response
                     self.updateDataForVehicle(with: response[0])
-                    self.picker.reloadAllComponents()
+                    
+                     // update picker with info
+                    DispatchQueue.main.async {
+                        self.picker.reloadAllComponents()
+                    }
                 case .failure(let error):
                     print(error)
                     self.showAlert(title: "Network error", message: DataError.badResponse.localizedDescription)
                 }
             }
         }
-        
+        }
+    
     }
 
+    // performed on converting cost
     func checkConversionInput(textInput: String) throws {
+        // check for number input
         guard let number = Double(textInput) else {
             throw CostConversion.invalidInput
         }
         self.input = number
         
+        // check for non-zero/non-negative input
         if number == 0 || number < 0 {
             throw CostConversion.zeroOrNegativeInput
         }
@@ -380,8 +423,7 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         // Do any additional setup after loading the view.
         
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
-            let textField = alert?.textFields![0] // Force unwrapping because we know it exists
-            guard let textInput = textField?.text else { return }
+            guard let textField = alert?.textFields?.first, let textInput = textField.text else { return }
             
             do {
                 try self.checkConversionInput(textInput: textInput)
@@ -394,6 +436,7 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             }
         }))
         
+        // add text entry for conversion prompt
         alert.addTextField { (textField) in
             textField.placeholder = "Enter a number"
         }
@@ -407,15 +450,16 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
         
         guard let category = selectedCategory else { return }
         
+        // set view title
         self.title = String(describing: category.rawValue)
         
+        // UI updates
         updateLabels(category: category)
-        
         updateView(category: category)
       
     }
     
-    //MARK: - Delegates and data sources
+    //MARK: - Delegates and data sources (for picker)
     //MARK: Data Sources
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -423,7 +467,7 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         guard let selectedCategory = selectedCategory else { return 0 }
-        
+        // load result depending on category
             switch selectedCategory {
             case .characters:
                 guard let result = peopleResults?.count else { return 0 }
@@ -476,7 +520,7 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
     
     // MARK: Actions
     
-    
+    // called for cost and unit conversions
     @IBAction func convertToUSD(_ sender: UIButton) {
         creditButton.isEnabled = true
         usdButton.isEnabled = false

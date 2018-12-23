@@ -19,12 +19,10 @@ struct Networker {
         let request = URLRequest(url: url)
         
         let task = session.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                if error != nil {
-                    completion(.failure(DataError.badResponse))
-                } else if let data = data {
-                    completion(.success(data))
-                }
+            if let error = error {
+                completion(.failure(error))
+            } else if let data = data {
+                completion(.success(data))
             }
         }
         task.resume()

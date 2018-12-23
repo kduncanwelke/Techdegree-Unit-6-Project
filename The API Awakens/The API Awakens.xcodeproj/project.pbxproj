@@ -30,7 +30,6 @@
 		2DDA1BB421C4277400EF8F2E /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DDA1BB321C4277400EF8F2E /* Result.swift */; };
 		2DDA1BB621C42D0400EF8F2E /* PageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DDA1BB521C42D0400EF8F2E /* PageManager.swift */; };
 		2DDA1BB821C42EAA00EF8F2E /* PeopleDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DDA1BB721C42EAA00EF8F2E /* PeopleDataManager.swift */; };
-		2DF96F3B21CC42980052F0C8 /* FindLargeAndSmall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF96F3A21CC42980052F0C8 /* FindLargeAndSmall.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,7 +58,6 @@
 		2DDA1BB321C4277400EF8F2E /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		2DDA1BB521C42D0400EF8F2E /* PageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageManager.swift; sourceTree = "<group>"; };
 		2DDA1BB721C42EAA00EF8F2E /* PeopleDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleDataManager.swift; sourceTree = "<group>"; };
-		2DF96F3A21CC42980052F0C8 /* FindLargeAndSmall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindLargeAndSmall.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +97,6 @@
 				2D96F15221C5A20A00A310E0 /* SelectedType.swift */,
 				2D96F15021C5A12A00A310E0 /* DetailViewController.swift */,
 				2DD23F7421CD8C420047B4E0 /* Alert.swift */,
-				2DF96F3A21CC42980052F0C8 /* FindLargeAndSmall.swift */,
 				2D71252E21C0639500B1A851 /* Main.storyboard */,
 				2D71253121C0639500B1A851 /* Assets.xcassets */,
 				2D71253321C0639500B1A851 /* LaunchScreen.storyboard */,
@@ -212,7 +209,6 @@
 			files = (
 				2D71254321C067D400B1A851 /* Vehicle.swift in Sources */,
 				2DDA1BB821C42EAA00EF8F2E /* PeopleDataManager.swift in Sources */,
-				2DF96F3B21CC42980052F0C8 /* FindLargeAndSmall.swift in Sources */,
 				2DDA1BB421C4277400EF8F2E /* Result.swift in Sources */,
 				2D71254621C06B9F00B1A851 /* Species.swift in Sources */,
 				2D96F15321C5A20A00A310E0 /* SelectedType.swift in Sources */,
